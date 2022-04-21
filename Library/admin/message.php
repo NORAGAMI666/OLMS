@@ -147,6 +147,8 @@
 				{
 					$res=mysqli_query($db,"SELECT * FROM message WHERE username='$_POST[username]' ;");
 
+					mysqli_query($db, "UPDATE message SET status = 'yes' WHERE sender = 'student' AND username = '$_POST[username]' ;");
+
 					if($_POST['username'] != '')
 					{
 						$_SESSION['username'] = $_POST['username'];
@@ -174,9 +176,7 @@
 						<div class="chat user">
 							<div style="float: left; padding-top: 5px;">
 								&nbsp;
-								<?php
-									echo "<img class='img-circle profile_img' height=60 width=60 src='images/".$_SESSION['propic']."'>";
-								?>
+								<img style="height:60px; width:60px; border-radius: 50%;" src="images/dpfp.jpg">
 								&nbsp;
 							</div>
 							<div style="float: left;" class="chatbox">
@@ -199,7 +199,9 @@
 						<div class="chat admin">
 							<div style="float: left; padding-top: 5px;">
 								&nbsp;
-								<img style="height:60px; width:60px; border-radius: 50%;" src="images/dpfp.jpg">
+								<?php
+									echo "<img class='img-circle profile_img' height=60 width=60 src='images/".$_SESSION['propic']."'>";
+								?>
 								&nbsp;
 							</div>
 							<div style="float: left;" class="chatbox">
@@ -235,7 +237,96 @@
 					if($_SESSION['username'] == '')
 					{
 						?>
-							<img style="margin: 100px 80px" src="images/4.jpg">
+							<img style="margin: 100px 80px" src="images/mr-bean.gif" alt="animated">
+						<?php
+					}
+					else
+					{
+						if(isset($_POST['submit1']))
+						{
+							mysqli_query($db,"INSERT INTO `mylibrary`.`message` VALUES ('','$_SESSION[username]','$_POST[mesage]','no','admin');");
+
+							$res=mysqli_query($db,"SELECT * FROM message WHERE username='$_SESSION[username]' ;");
+						}
+						else
+						{
+							$res=mysqli_query($db,"SELECT * FROM message WHERE username='$_SESSION[username]' ;");
+						}
+						?>
+							<div style="height: 70px; width: 100%; text-align: center; color: black;">
+								<h3 style="margin-top: -5px; padding-top: 10px;">
+									<?php
+										echo $_SESSION['username'];
+									?> 
+								</h3>
+							</div>
+
+							<div class="msg">
+								<br>
+								<?php
+									while($row=mysqli_fetch_assoc($res))
+									{
+										if($row['sender']=='student')
+										{
+								?>
+								<!-- student -->
+								<div class="chat user">
+									<div style="float: left; padding-top: 5px;">
+										&nbsp;
+										<img style="height:60px; width:60px; border-radius: 50%;" src="images/dpfp.jpg">
+										&nbsp;
+									</div>
+									<div style="float: left;" class="chatbox">
+										<p>
+											<?php
+												echo $row['massage'];
+											?>
+										</p>
+									</div>
+								</div><br>
+
+								<?php
+										}
+										else
+										{
+								?>
+
+								<!-- admin -->
+
+								<div class="chat admin">
+									<div style="float: left; padding-top: 5px;">
+										&nbsp;
+										<?php
+											echo "<img class='img-circle profile_img' height=60 width=60 src='images/".$_SESSION['propic']."'>";
+										?>
+										&nbsp;
+									</div>
+									<div style="float: left;" class="chatbox">
+										<p>
+											<?php
+												echo $row['massage'];
+											?>
+										</p>
+									</div>
+								</div>
+								<br>
+
+								<?php
+										}
+									}
+								?>
+							</div>
+
+							<div style="height: 100px; padding-top: 10px;">
+								<form class="from" action="" method="post">
+										&nbsp;&nbsp;
+									<input type="text" name="mesage" class="form-control" required="" placeholder="Type Here...">
+									<button type="submit" name="submit1" style="height: 60px; width: 75px; border-radius: 50px;" class="btn btn-info btn-lg">
+										<span class="glyphicon glyphicon-send"></span>
+									</button>
+								</form>
+							</div>
+
 						<?php
 					}
 				}
