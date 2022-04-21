@@ -80,6 +80,7 @@
 			{
 				$_SESSION['login_user'] = $_POST['username'];
 				$_SESSION['propic'] = $row['propic'];
+				$_SESSION['username'] = ''; 
 				?>
 					
 					<script type="text/javascript">
